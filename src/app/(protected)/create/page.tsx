@@ -16,31 +16,27 @@ type FormInput = {
 
 const CreatePage = () => {
   const { register, handleSubmit, reset } = useForm<FormInput>();
-  const createProject = api.project.createProject.useMutation();
+  const { mutateAsync, isPending, data } =
+    api.project.createProject.useMutation();
   const refetch = useRefetch();
-  function onSubmit(data: FormInput) {
-    createProject.mutate(
-      {
-        githubUrl: data.repoUrl,
-        name: data.projectName,
-        githubToken: data.githubToke,
-      },
-      {
-        onSuccess: () => {
-          toast.success("Project created successfully");
-          refetch();
-          reset();
-        },
-        onError: () => {
-          toast.error("Failed to create project");
-        },
-      },
-    );
+  async function onSubmit(data: FormInput) {
+    await mutateAsync({
+      githubUrl: data.repoUrl,
+      name: data.projectName,
+      githubToken: data.githubToke,
+    });
+    if (data) {
+      toast.success("Project created successfully!");
+      reset();
+      refetch();
+    } else {
+      toast.error("Error creating project!");
+    }
   }
 
   return (
     <div className="flex h-full items-center justify-center gap-12">
-      <Image src={"/logo.png"} alt="logo" className="h-56 w-auto" />
+      <img src={"/logo.png"} alt="logo" className="h-56 w-auto" />
       <div>
         <div>
           <h1 className="text-2xl font-semibold">
@@ -70,7 +66,7 @@ const CreatePage = () => {
                 placeholder="Github Token (optional)"
               />
               <div className="h-4"></div>
-              <Button type="submit" disabled={createProject.isPending}>
+              <Button type="submit" disabled={isPending}>
                 Create Project
               </Button>
             </form>

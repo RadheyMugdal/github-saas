@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useReducer } from "react";
 
 const items = [
@@ -54,6 +54,7 @@ const items = [
 const AppSidebar = () => {
   const pathname = usePathname();
   const { open } = useSidebar();
+  const router = useRouter();
   const { projects, projectId, setProjectId } = useProject();
   return (
     <Sidebar collapsible="icon" variant="floating">
@@ -96,7 +97,10 @@ const AppSidebar = () => {
                 <SidebarMenuItem key={item.name}>
                   <SidebarMenuButton
                     asChild
-                    onClick={() => setProjectId(item.id)}
+                    onClick={() => {
+                      setProjectId(item.id);
+                      router.push(`/dashboard`);
+                    }}
                   >
                     <div>
                       <div

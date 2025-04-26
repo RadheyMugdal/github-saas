@@ -4,9 +4,21 @@ import { useUser } from "@clerk/nextjs";
 import { ExternalLink, Github } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import CommitLog from "./commit-log";
+import AskQuestionCard from "./ask-question-card";
+import MeetingCard from "./meeting-card";
 
 const DashboardPage = () => {
   const { project } = useProject();
+  if (!project) {
+    return (
+      <div className="flex h-full items-center justify-center gap-12">
+        <p className="text-muted-foreground text-sm">
+          No project found. Please create a project.
+        </p>
+      </div>
+    );
+  }
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-y-4">
@@ -16,13 +28,13 @@ const DashboardPage = () => {
             <Github className="size-6 text-white" />
             <p className="text-sm font-medium text-white">
               This project is linked to{" "}
-              {/* <Link
-                href={project?.githubUrl as string}
+              <Link
+                href={project!.githubUrl}
                 className="inline-flex items-center text-white/80 hover:underline"
               >
                 {project?.githubUrl}
                 <ExternalLink className="ml-1 size-5" />
-              </Link> */}
+              </Link>
             </p>
           </div>
         </div>
@@ -34,10 +46,12 @@ const DashboardPage = () => {
 
       <div className="mt-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
-          AskQuestionCard MeetingCard
+          <AskQuestionCard />
+          <MeetingCard />
         </div>
         <div className="mt-8"></div>
-        Commit log
+
+        <CommitLog />
       </div>
     </div>
   );
