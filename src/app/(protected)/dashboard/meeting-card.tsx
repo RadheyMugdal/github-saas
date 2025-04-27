@@ -6,10 +6,29 @@ import { Presentation, Upload } from "lucide-react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { api } from "@/trpc/react";
+import { useProject } from "@/hooks/useProject";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 const MeetingCard = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const { project } = useProject();
+  const processMeeting = useMutation({
+    mutationFn: async (data: {
+      meetingUrl: string;
+      meetingId: string;
+      projectId: string;
+    }) => {
+      const res = await axios.post("/api/process-meeting", { ...data });
+      return res.data;
+    },
+  });
+  const router = useRouter();
+  const uploadMeeting = api.project.uploadMeeting.useMutation();
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "audio/*": [".mp3", ".wav", ".m4a"],
@@ -17,10 +36,32 @@ const MeetingCard = () => {
     multiple: false,
     maxSize: 50_000_000,
     onDrop: async (acceptedFiles) => {
+      if (!project) return;
       setIsUploading(true);
       const file = acceptedFiles[0];
+      if (!file) return;
       const data = await uploadFile(file as File, setProgress);
-      window.alert(data);
+      uploadMeeting.mutate(
+        {
+          projectId: project.id,
+          meetingUrl: data,
+          name: file.name,
+        },
+        {
+          onSuccess: (meeting) => {
+            toast.success("Meeting uploaded successfully");
+            router.push("/meetings");
+            processMeeting.mutateAsync({
+              meetingUrl: data,
+              meetingId: meeting.id,
+              projectId: project.id,
+            });
+          },
+          onError: () => {
+            toast.error("Failed to upload meeting.");
+          },
+        },
+      );
 
       setIsUploading(false);
     },
