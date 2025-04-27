@@ -1,16 +1,16 @@
 import { useProject } from "@/hooks/useProject";
 import { api } from "@/trpc/react";
+import Image from "next/image";
 import React from "react";
 
-type Props = {};
-
-const TeamMembers = (props: Props) => {
+const TeamMembers = () => {
   const { projectId } = useProject();
   const { data: members } = api.project.getTeamMembers.useQuery({ projectId });
   return (
     <div className="flex items-center gap-2">
       {members?.map((member) => (
-        <img
+        <Image
+          key={member.id}
           src={member.user.imageUrl as string}
           alt={member.user.firstName as string}
           height={30}

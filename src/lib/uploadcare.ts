@@ -1,4 +1,7 @@
-import { uploadDirect } from "@uploadcare/upload-client";
+import {
+  ComputableProgressInfo,
+  uploadDirect,
+} from "@uploadcare/upload-client";
 export const uploadFile = async (
   file: File,
   setProgress: (progress: number) => void,

@@ -3,6 +3,7 @@ import { useProject } from "@/hooks/useProject";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { ExternalLink } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -23,7 +24,7 @@ const CommitLog = () => {
               <div className="w-px translate-x-1 bg-gray-200"></div>
             </div>
             <>
-              <img
+              <Image
                 src={commit.commitAuthorAvatar}
                 alt="commit avatar"
                 className="relative mt-3 size-8 flex-none rounded-full bg-gray-50"

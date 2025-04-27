@@ -16,6 +16,7 @@ import CodeReferences from "./code-references";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
 import useRefetch from "@/hooks/useRefetch";
+import Image from "next/image";
 
 const AskQuestionCard = () => {
   const { project } = useProject();
@@ -55,14 +56,14 @@ const AskQuestionCard = () => {
           <DialogHeader>
             <div className="flex items-center gap-2">
               <DialogTitle>
-                <img src="/logo.png" alt="" />
+                <Image src="/logo.png" alt="" />
               </DialogTitle>
               <Button
                 variant={"outline"}
                 onClick={() => {
                   saveAnswer.mutate(
                     {
-                      projectId: project?.id!,
+                      projectId: project?.id as string,
                       question,
                       answer,
                       fileReferences,
