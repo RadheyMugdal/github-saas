@@ -1,5 +1,5 @@
 import { db } from "@/server/db";
-import { auth, clerkClient } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -9,23 +9,10 @@ type Props = {
 
 const JoinHandler = async ({ params }: Props) => {
   const { projectId } = await params;
-  const { userId } = await auth();
-  if (!userId) redirect("/sign-in");
-  const dbUser = await db.user.findUnique({ where: { id: userId } });
+  const session = await auth();
+  if (!session?.user) redirect("/sign-in");
+  const dbUser = await db.user.findUnique({ where: { id: session.user.id } });
 
-  const client = await clerkClient();
-  const user = await client.users.getUser(userId);
-  if (!dbUser) {
-    await db.user.create({
-      data: {
-        id: userId,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        emailAddress: user.emailAddresses[0]?.emailAddress as string,
-        imageUrl: user.imageUrl,
-      },
-    });
-  }
   const project = await db.project.findUnique({
     where: { id: projectId },
     include: {
@@ -39,7 +26,7 @@ const JoinHandler = async ({ params }: Props) => {
     await db.userToProject.create({
       data: {
         projectId: projectId,
-        userId,
+        userId: session.user.id as string,
       },
     });
   } catch (error) {

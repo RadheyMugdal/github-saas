@@ -1,5 +1,5 @@
 "use server";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Stripe from "stripe";
 
@@ -8,8 +8,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export async function createCheckoutSession(credits: number) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("User not found");
+  const userSession = await auth();
+  if (!userSession?.user) throw new Error("User not found");
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items: [
@@ -28,7 +28,7 @@ export async function createCheckoutSession(credits: number) {
     mode: "payment",
     success_url: `${process.env.NEXT_PUBLIC_APP_URL}/create`,
     cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/billing`,
-    client_reference_id: userId.toString(),
+    client_reference_id: userSession.user.id,
     metadata: {
       credits,
     },

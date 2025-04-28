@@ -11,7 +11,7 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "@/server/db";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 
 /**
  * 1. CONTEXT
@@ -82,9 +82,9 @@ export const createTRPCRouter = t.router;
  */
 
 const isAuthenticated = t.middleware(async ({ next, ctx }) => {
-  const user = await auth();
+  const session = await auth();
 
-  if (!user) {
+  if (!session?.user) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
       message: "You must be logged in to access this resource",
@@ -93,7 +93,9 @@ const isAuthenticated = t.middleware(async ({ next, ctx }) => {
   return next({
     ctx: {
       ...ctx,
-      user,
+      user: {
+        ...session.user,
+      },
     },
   });
 });

@@ -16,7 +16,7 @@ export const projectRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.db.user.findUnique({
         where: {
-          id: ctx.user.userId!,
+          id: ctx.user.id,
         },
         select: {
           credits: true,
@@ -34,7 +34,7 @@ export const projectRouter = createTRPCRouter({
           githubUrl: input.githubUrl,
           userToProject: {
             create: {
-              userId: ctx.user.userId!,
+              userId: ctx.user.id!,
             },
           },
         },
@@ -43,7 +43,7 @@ export const projectRouter = createTRPCRouter({
       await pollCommits(project.id);
       await ctx.db.user.update({
         where: {
-          id: ctx.user.userId!,
+          id: ctx.user.id,
         },
         data: {
           credits: {
@@ -58,7 +58,7 @@ export const projectRouter = createTRPCRouter({
       where: {
         userToProject: {
           some: {
-            userId: ctx.user.userId!,
+            userId: ctx.user.id,
           },
         },
         deletedAt: null,
@@ -95,7 +95,7 @@ export const projectRouter = createTRPCRouter({
           filesReferences: input.fileReferences,
           projectId: input.projectId,
           question: input.question,
-          userId: ctx.user.userId!,
+          userId: ctx.user.id!,
         },
       });
     }),
@@ -209,7 +209,7 @@ export const projectRouter = createTRPCRouter({
   getMyCredits: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.user.findUnique({
       where: {
-        id: ctx.user.userId!,
+        id: ctx.user.id,
       },
       select: {
         credits: true,
@@ -227,7 +227,7 @@ export const projectRouter = createTRPCRouter({
       const fileCount = await checkCredits(input.githubUrl, input.githubToken);
       const userCredits = await ctx.db.user.findUnique({
         where: {
-          id: ctx.user.userId!,
+          id: ctx.user.id,
         },
         select: {
           credits: true,

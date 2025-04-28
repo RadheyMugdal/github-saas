@@ -47,7 +47,7 @@ const CreatePage = () => {
     : false;
   return (
     <div className="flex h-full items-center justify-center gap-12">
-      <Image src={"/logo.png"} alt="logo" className="h-56 w-auto" />
+      <img src={"/logo.png"} alt="logo" className="h-56 w-auto" />
       <div>
         <div>
           <h1 className="text-2xl font-semibold">
