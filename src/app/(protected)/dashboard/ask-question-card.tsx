@@ -17,6 +17,7 @@ import { api } from "@/trpc/react";
 import { toast } from "sonner";
 import useRefetch from "@/hooks/useRefetch";
 import Image from "next/image";
+import { SiDailydotdev } from "react-icons/si";
 
 const AskQuestionCard = () => {
   const { project } = useProject();
@@ -56,7 +57,10 @@ const AskQuestionCard = () => {
           <DialogHeader>
             <div className="flex items-center gap-2">
               <DialogTitle>
-                <Image src="/logo.png" alt="" />
+                <div className="flex gap-2">
+                  <SiDailydotdev className="text-primary size-7" />{" "}
+                  <h1 className="text-primary/90 text-xl font-bold">DevSage</h1>
+                </div>
               </DialogTitle>
               <Button
                 variant={"outline"}
@@ -110,7 +114,7 @@ const AskQuestionCard = () => {
             />
             <div className="h-4"></div>
             <Button type="submit" disabled={loading}>
-              Ask Dionysus
+              Ask DevSage
             </Button>
           </form>
         </CardContent>

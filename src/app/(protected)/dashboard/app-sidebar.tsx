@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { SiDailydotdev } from "react-icons/si";
 import {
   Sidebar,
   SidebarContent,
@@ -60,9 +61,9 @@ const AppSidebar = () => {
     <Sidebar collapsible="icon" variant="floating">
       <SidebarHeader>
         <div className="flex items-center gap-2">
-          <Image src={"/logo.png"} width={40} height={40} alt="logo" />
+          <SiDailydotdev className="text-primary size-7" />
           {open && (
-            <h1 className="text-primary/90 text-xl font-bold">Dionysus</h1>
+            <h1 className="text-primary/90 text-xl font-bold">DevSage</h1>
           )}
         </div>
       </SidebarHeader>

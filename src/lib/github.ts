@@ -19,9 +19,13 @@ export const getLatestCommits = async (
   githubUrl: string,
 ): Promise<CommitInfo[]> => {
   const [owner, repo] = githubUrl.split("/").slice(-2);
+
   if (!owner || !repo) throw new Error("Invalid GitHub URL");
 
-  const { data } = await octokit.rest.repos.listCommits({ owner, repo });
+  const { data } = await octokit.rest.repos.listCommits({
+    owner,
+    repo,
+  });
 
   return data
     .sort(
@@ -48,8 +52,8 @@ export const pollCommits = async (projectId: string) => {
   );
 
   const summaries = await Promise.allSettled(
-    unprocessedCommits.map((commit) =>
-      summarizeCommitDiff(githubUrl, commit.commitHash),
+    unprocessedCommits.map(
+      async (commit) => await summarizeCommitDiff(githubUrl, commit.commitHash),
     ),
   );
 

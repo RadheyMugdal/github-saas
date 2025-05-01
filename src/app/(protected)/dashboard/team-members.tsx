@@ -11,8 +11,8 @@ const TeamMembers = () => {
       {members?.map((member) => (
         <Image
           key={member.id}
-          src={member.user.imageUrl as string}
-          alt={member.user.firstName as string}
+          src={member.user.image as string}
+          alt={member.user.name as string}
           height={30}
           width={30}
           className="rounded-full"

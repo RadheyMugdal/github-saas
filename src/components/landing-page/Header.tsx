@@ -1,0 +1,144 @@
+"use client";
+import React, { useState } from "react";
+import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { SiDailydotdev } from "react-icons/si";
+
+const Header = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  return (
+    <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/80 backdrop-blur-sm">
+      <div className="container mx-auto px-4">
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo */}
+          <div className="flex flex-shrink-0 items-center">
+            <h1 className="text-primary flex gap-2 text-xl font-bold">
+              <SiDailydotdev className="text-primary size-7" />
+              <span>
+                {" "}
+                Dev<span className="text-sage-600">Sage</span>
+              </span>
+            </h1>
+          </div>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden space-x-8 md:flex">
+            <a
+              href="#features"
+              className="text-sm font-medium text-slate-600 hover:text-indigo-600"
+            >
+              Features
+            </a>
+            <a
+              href="#how-it-works"
+              className="text-sm font-medium text-slate-600 hover:text-indigo-600"
+            >
+              How It Works
+            </a>
+            <a
+              href="#testimonials"
+              className="text-sm font-medium text-slate-600 hover:text-indigo-600"
+            >
+              Testimonials
+            </a>
+            <a
+              href="#pricing"
+              className="text-sm font-medium text-slate-600 hover:text-indigo-600"
+            >
+              Pricing
+            </a>
+            <a
+              href="#faq"
+              className="text-sm font-medium text-slate-600 hover:text-indigo-600"
+            >
+              FAQ
+            </a>
+          </nav>
+
+          {/* CTA Buttons */}
+          <div className="hidden items-center space-x-4 md:flex">
+            <Link href={"/sign-in"}>
+              <Button variant="ghost" size="sm">
+                Log in
+              </Button>
+            </Link>
+            <Link href={"/sign-up"}>
+              <Button size="sm">Get Started</Button>
+            </Link>
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <button
+              type="button"
+              className="inline-flex items-center justify-center rounded-md p-2 text-slate-600 hover:text-indigo-600"
+              onClick={toggleMobileMenu}
+            >
+              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      <div
+        className={cn(
+          "overflow-hidden transition-all duration-300 ease-in-out md:hidden",
+          mobileMenuOpen ? "max-h-screen" : "max-h-0",
+        )}
+      >
+        <div className="space-y-2 border-t border-gray-100 bg-white px-4 pt-2 pb-4">
+          <a
+            href="#features"
+            className="block px-3 py-2 text-base font-medium text-slate-600 hover:text-indigo-600"
+          >
+            Features
+          </a>
+          <a
+            href="#how-it-works"
+            className="block px-3 py-2 text-base font-medium text-slate-600 hover:text-indigo-600"
+          >
+            How It Works
+          </a>
+          <a
+            href="#testimonials"
+            className="block px-3 py-2 text-base font-medium text-slate-600 hover:text-indigo-600"
+          >
+            Testimonials
+          </a>
+          <a
+            href="#pricing"
+            className="block px-3 py-2 text-base font-medium text-slate-600 hover:text-indigo-600"
+          >
+            Pricing
+          </a>
+          <a
+            href="#faq"
+            className="block px-3 py-2 text-base font-medium text-slate-600 hover:text-indigo-600"
+          >
+            FAQ
+          </a>
+          <div className="flex flex-col gap-2 pt-2">
+            <Link href={"/sign-in"}>
+              <Button variant={"outline"} className="w-full">
+                Log in
+              </Button>
+            </Link>
+            <Link href={"/sign-up"}>
+              <Button className="w-full">Get Started</Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;

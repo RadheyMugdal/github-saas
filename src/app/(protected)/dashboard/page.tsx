@@ -26,8 +26,8 @@ const DashboardPage = () => {
       <div className="flex flex-wrap items-center justify-between gap-y-4">
         {/* Github link  */}
         <div className="bg-primary w-fit rounded-md px-4 py-3">
-          <div className="flex items-center">
-            <Github className="size-6 text-white" />
+          <div className="flex items-center gap-2">
+            <Github className="size-4 text-white" />
             <p className="text-sm font-medium text-white">
               This project is linked to{" "}
               <Link
@@ -35,7 +35,7 @@ const DashboardPage = () => {
                 className="inline-flex items-center text-white/80 hover:underline"
               >
                 {project?.githubUrl}
-                <ExternalLink className="ml-1 size-5" />
+                <ExternalLink className="ml-1 size-4" />
               </Link>
             </p>
           </div>

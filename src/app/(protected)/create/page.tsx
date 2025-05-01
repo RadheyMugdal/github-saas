@@ -22,7 +22,7 @@ const CreatePage = () => {
     api.project.createProject.useMutation();
   const refetch = useRefetch();
   async function onSubmit(data: FormInput) {
-    if (!!checkCredits.data) {
+    if (!checkCredits.data) {
       await mutateAsync({
         githubUrl: data.repoUrl,
         name: data.projectName,
@@ -47,14 +47,20 @@ const CreatePage = () => {
     : false;
   return (
     <div className="flex h-full items-center justify-center gap-12">
-      <img src={"/logo.png"} alt="logo" className="h-56 w-auto" />
+      <img
+        src={
+          "https://img.freepik.com/free-vector/cloud-computing-concept_53876-64621.jpg?t=st=1745953922~exp=1745957522~hmac=6ed60f56b56f146e8a74b4eee14dd24b1ada46cfc5ed77f99701197100bb6cfc&w=1060"
+        }
+        alt="logo"
+        className="h-56 w-auto"
+      />
       <div>
         <div>
           <h1 className="text-2xl font-semibold">
             Link your Github Repository
           </h1>
           <p className="text-muted-foreground text-sm">
-            Enter the URL of your repository to link it to Dionysus.
+            Enter the URL of your repository to link it to DevSage.
           </p>
           <div className="h-4"></div>
           <div>

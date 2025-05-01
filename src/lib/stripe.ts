@@ -17,7 +17,7 @@ export async function createCheckoutSession(credits: number) {
         price_data: {
           currency: "usd",
           product_data: {
-            name: `${credits} Dionysus credits`,
+            name: `${credits} DevSage credits`,
           },
           unit_amount: Math.round((credits / 50) * 100),
         },

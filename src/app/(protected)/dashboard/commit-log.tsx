@@ -24,7 +24,7 @@ const CommitLog = () => {
               <div className="w-px translate-x-1 bg-gray-200"></div>
             </div>
             <>
-              <Image
+              <img
                 src={commit.commitAuthorAvatar}
                 alt="commit avatar"
                 className="relative mt-3 size-8 flex-none rounded-full bg-gray-50"

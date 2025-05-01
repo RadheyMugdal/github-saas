@@ -34,7 +34,7 @@ export const projectRouter = createTRPCRouter({
           githubUrl: input.githubUrl,
           userToProject: {
             create: {
-              userId: ctx.user.id!,
+              userId: ctx.user.id as string,
             },
           },
         },

@@ -14,16 +14,18 @@ import {
 import React from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { SiDailydotdev } from "react-icons/si";
 
 const Page = () => (
   <div className="flex h-screen w-screen items-center justify-center">
     <Card className="mx-4 w-full max-w-md shadow-xl">
       <CardHeader>
-        <CardTitle className="text-center text-lg">
-          Sign up with Dionysus
+        <CardTitle className="flex flex-col items-center justify-center gap-4 text-center text-lg">
+          <SiDailydotdev className="text-primary size-7" />
+          Sign up with DevSage
         </CardTitle>
         <CardDescription className="text-center">
-          Welcome! Sign up to get started with Dionysus
+          Welcome! Sign up to get started with DevSage
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-8">

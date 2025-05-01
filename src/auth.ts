@@ -18,6 +18,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       // Always redirect to the dashboard after login
       return `${baseUrl}/dashboard`;
     },
+    async session({ session, user, token }) {
+      // Make sure to maintain the session structure
+      // Add any additional properties to session.user
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.sub || user?.id,
+        },
+      };
+    },
   },
   ...authConfig,
 });
