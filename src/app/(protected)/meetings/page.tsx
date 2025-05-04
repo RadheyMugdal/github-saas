@@ -24,7 +24,11 @@ const MeetingsPage = () => {
       <MeetingCard />
       <div className="h-6"></div>
       <h1 className="text-xl font-semibold">Meetings</h1>
-      {meetings && meetings.length === 0 && <div>No meetings found.</div>}
+      {meetings && meetings.length === 0 && (
+        <div className="flex h-[40vh] items-center justify-center">
+          No meetings found.
+        </div>
+      )}
       {isLoading && <div>Loading...</div>}
       <ul className="w-full divide-gray-200">
         {meetings?.map((meeting) => (

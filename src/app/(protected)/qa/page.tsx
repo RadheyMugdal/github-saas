@@ -25,17 +25,23 @@ const QAPage = () => {
       <AskQuestionCard />
       <div className="h-4"></div>
       <h1 className="text-xl font-semibold">Saved Questions</h1>
+      {questions?.length === 0 && (
+        <div className="flex h-[50vh] items-center justify-center">
+          No saved questions found.
+        </div>
+      )}
+      <div className="h-4"></div>
       <div className="flex flex-col gap-2">
         {questions?.map((question) => (
           <React.Fragment key={question.id}>
             <SheetTrigger>
               <div className="flex items-center gap-4 rounded-lg border bg-white p-4 shadow">
                 <Image
-                  alt={question.user.firstName as string}
+                  alt={question.user.name as string}
                   className="rounded-full"
                   height={30}
                   width={30}
-                  src={question.user.imageUrl as string}
+                  src={question.user.image as string}
                 />
                 <div className="flex flex-col text-left">
                   <div className="flex items-center gap-2">

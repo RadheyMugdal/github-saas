@@ -1,5 +1,6 @@
 import React from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import Image from "next/image";
 
 const HowItWorks = () => {
   const steps = [
@@ -8,24 +9,29 @@ const HowItWorks = () => {
       title: "Connect Your Repository",
       description:
         "Paste your GitHub repository URL and let DevSage analyze your codebase structure and dependencies.",
+      image: "/meeting-upload.png",
     },
     {
       number: "02",
       title: "Explore & Ask Questions",
       description:
         "Search through your code with natural language queries and get contextualized answers about your project.",
+
+      image: "/ask-que.png",
     },
     {
       number: "03",
       title: "Upload Meeting Recordings",
       description:
         "Upload your team meetings and DevSage will automatically generate summaries with development-focused insights.",
+      image: "/meeting-upload.png",
     },
     {
       number: "04",
       title: "Collaborate & Share Insights",
       description:
         "Share findings with your team and integrate seamlessly into your existing development workflow.",
+      image: "/invite.png",
     },
   ];
 
@@ -44,23 +50,32 @@ const HowItWorks = () => {
 
         <div className="relative">
           {/* Connector Line */}
-          <div className="absolute top-12 bottom-12 left-1/2 hidden w-0.5 -translate-x-1/2 bg-gradient-to-b from-indigo-500 to-cyan-500 lg:block"></div>
+          {/* <div className="from-primary absolute top-12 bottom-12 left-1/2 hidden w-0.5 -translate-x-1/2 bg-gradient-to-b to-cyan-500 lg:block"></div> */}
 
-          <div className="space-y-16 lg:space-y-0">
+          <div className="flex flex-col items-center justify-center gap-12 space-y-16 lg:space-y-0">
             {steps.map((step, index) => (
               <div
                 key={index}
-                className="flex flex-col items-center gap-8 lg:flex-row lg:items-start"
+                className="flex flex-col items-center gap-20 lg:flex-row"
               >
                 <div
                   className={`lg:w-1/2 ${index % 2 === 1 ? "lg:order-2" : ""}`}
                 >
                   <div className="mx-auto max-w-md lg:mx-0">
                     <div className="mb-4 flex items-center gap-4">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600 font-bold text-white">
-                        {step.number}
-                      </div>
-                      <ArrowRight size={20} className="text-indigo-600" />
+                      {parseInt(step.number) % 2 === 0 ? (
+                        <div className="flex items-center justify-center gap-2">
+                          <div className="bg-primary flex h-10 w-10 items-center justify-center rounded-full font-bold text-white">
+                            {step.number}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-center gap-2">
+                          <div className="bg-primary flex h-10 w-10 items-center justify-center rounded-full font-bold text-white">
+                            {step.number}
+                          </div>
+                        </div>
+                      )}
                     </div>
                     <h3 className="mb-3 text-lg font-bold md:text-2xl">
                       {step.title}
@@ -75,11 +90,15 @@ const HowItWorks = () => {
                   className={`lg:w-1/2 ${index % 2 === 1 ? "lg:order-1" : ""}`}
                 >
                   <div
-                    className={`flex h-64 items-center justify-center rounded-xl border border-slate-100 bg-slate-50 p-4 ${index % 2 === 0 ? "lg:ml-auto" : "lg:mr-auto"} max-w-md`}
+                    className={`flex h-64 max-w-md items-center justify-center rounded-xl border border-slate-100 bg-slate-50`}
                   >
-                    <div className="text-sm text-slate-400">
-                      Step {parseInt(step.number)} Illustration
-                    </div>
+                    <Image
+                      src={step.image}
+                      alt={step.title}
+                      className="h-full w-full"
+                      width={1024}
+                      height={1024}
+                    />
                   </div>
                 </div>
               </div>

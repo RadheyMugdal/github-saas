@@ -37,12 +37,12 @@ const items = [
   },
   {
     title: "Q&A",
-    url: "qa",
+    url: "/qa",
     icon: Bot,
   },
   {
     title: "Meetings",
-    url: "meetings",
+    url: "/meetings",
     icon: Presentation,
   },
   {
@@ -57,15 +57,19 @@ const AppSidebar = () => {
   const { open } = useSidebar();
   const router = useRouter();
   const { projects, projectId, setProjectId } = useProject();
+  console.log(pathname);
+
   return (
     <Sidebar collapsible="icon" variant="floating">
       <SidebarHeader>
-        <div className="flex items-center gap-2">
-          <SiDailydotdev className="text-primary size-7" />
-          {open && (
-            <h1 className="text-primary/90 text-xl font-bold">DevSage</h1>
-          )}
-        </div>
+        <Link href={"/"}>
+          <div className="flex items-center gap-2">
+            <SiDailydotdev className="text-primary size-7" />
+            {open && (
+              <h1 className="text-primary/90 text-xl font-bold">DevSage</h1>
+            )}
+          </div>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -78,7 +82,7 @@ const AppSidebar = () => {
                     <Link
                       href={item.url}
                       className={cn({
-                        "bg-primary text-white": pathname === item.url,
+                        "bg-primary text-white": pathname.startsWith(item.url),
                       })}
                     >
                       <item.icon />

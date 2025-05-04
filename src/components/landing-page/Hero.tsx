@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const Hero = () => {
   return (
@@ -20,8 +21,7 @@ const Hero = () => {
           </div>
 
           <h1 className="mb-6 text-2xl font-semibold md:text-5xl">
-            Your Intelligent{" "}
-            <span className="gradient-text">Developer Assistant</span>
+            Your Intelligent <span className="">Developer Assistant</span>
           </h1>
 
           <p className="mx-auto mb-10 max-w-4xl text-sm text-slate-600 md:text-lg lg:max-w-3xl">
@@ -33,7 +33,7 @@ const Hero = () => {
           <div className="mb-16 flex flex-col justify-center gap-4 sm:flex-row">
             <Link href={"/sign-up"}>
               <Button size="lg" className="flex items-center gap-2">
-                Try DevSage Free <ArrowRight size={18} />
+                Try Devsage Free <ArrowRight size={18} />
               </Button>
             </Link>
             <Button variant="outline" size="lg">
@@ -55,7 +55,14 @@ const Hero = () => {
                   <span className="mr-4 text-xs text-slate-400">Dashboard</span>
                 </div>
               </div>
-              <div className="grid max-h-[500px] min-h-[400px] overflow-hidden md:grid-cols-12"></div>
+
+              <Image
+                src={"/image.png"}
+                width={1024}
+                height={1024}
+                alt="Dashboard page"
+                className="h-full w-full"
+              />
             </div>
           </div>
         </div>

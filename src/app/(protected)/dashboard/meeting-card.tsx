@@ -68,20 +68,22 @@ const MeetingCard = () => {
   });
   return (
     <Card
-      className="col-span-2 flex flex-col items-center justify-center"
+      className="col-span-2 flex flex-col items-center justify-center py-8"
       {...getRootProps()}
     >
       {!isUploading && (
         <>
-          <Presentation className="h-10 w-10 animate-bounce" />
-          <h3 className="mt-2 text-sm font-semibold text-gray-900">
-            Create a new meeting
-          </h3>
-          <p className="mt-1 text-center text-sm text-gray-500">
-            Analyse your meeting with Diaonysus.
-            <br />
-            Power by AI.
-          </p>
+          <div className="flex flex-col items-center justify-center gap-1">
+            <Presentation className="h-10 w-10 animate-bounce" />
+            <h3 className="mt-2 text-sm font-semibold text-gray-900">
+              Create a new meeting
+            </h3>
+            <p className="mt-1 text-center text-sm text-gray-500">
+              Analyse your meeting with Diaonysus.
+              <br />
+              Power by AI.
+            </p>
+          </div>
           <div className="mt-6">
             <Button disabled={isUploading}>
               <Upload className="mr-1.5 -ml-0.5 h-5 w-5" aria-hidden />
@@ -92,7 +94,7 @@ const MeetingCard = () => {
         </>
       )}
       {isUploading && (
-        <div>
+        <div className="flex flex-col items-center justify-center gap-4">
           <CircularProgressbar
             value={progress}
             text={`${progress}%`}

@@ -19,13 +19,12 @@ const Header = () => {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex flex-shrink-0 items-center">
-            <h1 className="text-primary flex gap-2 text-xl font-bold">
-              <SiDailydotdev className="text-primary size-7" />
-              <span>
-                {" "}
-                Dev<span className="text-sage-600">Sage</span>
-              </span>
-            </h1>
+            <Link href={"/"}>
+              <h1 className="text-primary flex gap-2 text-xl font-bold">
+                <SiDailydotdev className="text-primary size-7" />
+                <span>DevSage</span>
+              </h1>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
@@ -41,12 +40,6 @@ const Header = () => {
               className="text-sm font-medium text-slate-600 hover:text-indigo-600"
             >
               How It Works
-            </a>
-            <a
-              href="#testimonials"
-              className="text-sm font-medium text-slate-600 hover:text-indigo-600"
-            >
-              Testimonials
             </a>
             <a
               href="#pricing"

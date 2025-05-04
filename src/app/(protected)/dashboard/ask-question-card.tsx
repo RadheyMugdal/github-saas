@@ -53,7 +53,7 @@ const AskQuestionCard = () => {
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[70vw]">
+        <DialogContent className="max-h-[90vh] overflow-y-scroll sm:max-w-[70vw]">
           <DialogHeader>
             <div className="flex items-center gap-2">
               <DialogTitle>
@@ -88,17 +88,16 @@ const AskQuestionCard = () => {
               </Button>
             </div>
           </DialogHeader>
-          <div data-color-mode="light" className="container">
-            <MDEditor.Markdown
-              source={answer}
-              className="!h-full max-h-[40vh] max-w-[70vw] overflow-scroll"
-            />
+          <div className="w-full">
+            <div data-color-mode="light" className="container">
+              <MDEditor.Markdown source={answer} className="w-full" />
+            </div>
+            <div className="h-4"></div>
+            <CodeReferences fileReferences={fileReferences} />
+            <Button type="button" onClick={() => setOpen(false)}>
+              Close
+            </Button>
           </div>
-          <div className="h-4"></div>
-          <CodeReferences fileReferences={fileReferences} />
-          <Button type="button" onClick={() => setOpen(false)}>
-            Close
-          </Button>
         </DialogContent>
       </Dialog>
       <Card className="relative col-span-3">
@@ -113,7 +112,7 @@ const AskQuestionCard = () => {
               onChange={(e) => setQuestion(e.target.value)}
             />
             <div className="h-4"></div>
-            <Button type="submit" disabled={loading}>
+            <Button type="submit" disabled={loading} className="ml-auto">
               Ask DevSage
             </Button>
           </form>

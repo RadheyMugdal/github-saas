@@ -2,6 +2,7 @@ import React from "react";
 import { Check, CreditCard, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const Pricing = () => {
   return (
@@ -95,8 +96,9 @@ const Pricing = () => {
                       Ideal for organizations with larger codebases
                     </p>
                   </div>
-
-                  <Button className="w-full">Go to Billing</Button>
+                  <Link href={"/billing"}>
+                    <Button className="w-full">Go to Billing</Button>
+                  </Link>
 
                   <p className="text-center text-sm text-slate-500">
                     Need a custom credit package?{" "}

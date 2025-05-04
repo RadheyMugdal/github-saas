@@ -32,11 +32,11 @@ const FeatureCard = ({
       )}
       style={style}
     >
-      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600">
+      <div className="text-primary mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-indigo-100">
         {icon}
       </div>
-      <h3 className="mb-2 text-lg font-bold md:text-xl">{title}</h3>
-      <p className="text-slate-600">{description}</p>
+      <h3 className="mb-2 text-lg font-bold md:text-lg">{title}</h3>
+      <p className="text-sm text-slate-600">{description}</p>
     </div>
   );
 };
@@ -82,7 +82,10 @@ const Features = () => {
   ];
 
   return (
-    <section id="features" className="bg-slate-50 px-12 py-28 md:px-20">
+    <section
+      id="features"
+      className="bg-slate-50 px-12 py-28 md:px-20 lg:px-32"
+    >
       <div className="container mx-auto">
         <div className="mx-auto mb-16 max-w-4xl text-center lg:max-w-2xl">
           <h2 className="mb-4 text-2xl font-semibold md:text-3xl">
