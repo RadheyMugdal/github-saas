@@ -43,8 +43,8 @@ const HowItWorks = () => {
             How DevSage Works
           </h2>
           <p className="text-xs text-slate-600 md:text-sm">
-            Get started in minutes with these simple steps to unlock your team's
-            potential
+            Get started in minutes with these simple steps to unlock your
+            team&apos;s potential
           </p>
         </div>
 

@@ -56,7 +56,7 @@ const page = () => {
         <div className="h-[1px] w-full bg-gray-200"></div>
         <CardFooter className="flex items-center justify-center">
           <p className="text-center text-sm opacity-60">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link href={"/sign-up"} className=" ">
               Sign up
             </Link>
