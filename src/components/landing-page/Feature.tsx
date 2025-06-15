@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Search,
@@ -8,7 +9,7 @@ import {
   Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
+import { motion } from "motion/react";
 interface FeatureCardProps {
   title: string;
   description: string;
@@ -26,13 +27,10 @@ const FeatureCard = ({
 }: FeatureCardProps) => {
   return (
     <div
-      className={cn(
-        "rounded-xl border border-slate-100 bg-white p-6 shadow-sm transition-shadow hover:shadow-md",
-        className,
-      )}
+      className={cn("rounded-xl p-6 transition-shadow", className)}
       style={style}
     >
-      <div className="text-primary mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-indigo-100">
+      <div className="text-primary bg-accent mb-4 flex h-12 w-12 items-center justify-center rounded-lg">
         {icon}
       </div>
       <h3 className="mb-2 text-lg font-bold md:text-lg">{title}</h3>
@@ -82,31 +80,54 @@ const Features = () => {
   ];
 
   return (
-    <section
-      id="features"
-      className="bg-slate-50 px-12 py-28 md:px-20 lg:px-32"
-    >
+    <section id="features" className="px-12 py-12 md:px-20 lg:px-32">
       <div className="container mx-auto">
-        <div className="mx-auto mb-16 max-w-4xl text-center lg:max-w-2xl">
-          <h2 className="mb-4 text-2xl font-semibold md:text-3xl">
+        <motion.div
+          initial={{
+            y: 40,
+            opacity: 0,
+          }}
+          whileInView={{
+            y: 0,
+            opacity: 1,
+            transition: {
+              duration: 0.6,
+              ease: "easeOut",
+            },
+          }}
+          viewport={{
+            once: true,
+            amount: 1,
+          }}
+          className="mx-auto mb-16 max-w-4xl text-center lg:max-w-2xl"
+        >
+          <h2 className="mb-4 text-2xl font-semibold md:text-4xl">
             Powerful Developer Tools
           </h2>
           <p className="text-xs text-slate-600 md:text-sm">
             DevSage combines AI-powered code understanding with meeting
             analytics to keep your team aligned and productive.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => (
-            <FeatureCard
+            <motion.div
               key={index}
-              title={feature.title}
-              description={feature.description}
-              icon={feature.icon}
-              className={`animate-fade-in`}
-              style={{ animationDelay: `${index * 100}ms` }}
-            />
+              initial={{ y: 20, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ delay: index * 0.3, duration: 0.5 }}
+              viewport={{ once: true, amount: 1 }}
+            >
+              <FeatureCard
+                key={index}
+                title={feature.title}
+                description={feature.description}
+                icon={feature.icon}
+                className={`animate-fade-in`}
+                style={{ animationDelay: `${index * 100}ms` }}
+              />
+            </motion.div>
           ))}
         </div>
       </div>

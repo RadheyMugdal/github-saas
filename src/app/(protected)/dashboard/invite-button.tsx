@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useProject } from "@/hooks/useProject";
+import { UserPlus } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
 
@@ -37,6 +38,7 @@ const InviteButton = () => {
         </DialogContent>
       </Dialog>
       <Button size={"sm"} onClick={() => setOpen(true)}>
+        <UserPlus />
         Invite Members
       </Button>
     </>

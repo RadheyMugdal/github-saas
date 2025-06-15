@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Accordion,
@@ -5,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { motion } from "motion/react";
 
 const FAQ = () => {
   const faqs = [
@@ -42,37 +44,73 @@ const FAQ = () => {
   ];
 
   return (
-    <section id="faq" className="bg-white px-12 py-28">
+    <section id="faq" className="px-12 py-20">
       <div className="container mx-auto">
-        <div className="mx-auto mb-16 max-w-2xl text-center">
-          <h2 className="mb-4 text-2xl font-semibold md:text-3xl">
+        <motion.div
+          initial={{
+            y: 40,
+            opacity: 0,
+          }}
+          whileInView={{
+            y: 0,
+            opacity: 1,
+            transition: {
+              duration: 0.6,
+              ease: "easeOut",
+            },
+          }}
+          viewport={{
+            once: true,
+            amount: 1,
+          }}
+          className="mx-auto mb-16 max-w-2xl text-center"
+        >
+          <h2 className="mb-4 text-2xl font-semibold md:text-4xl">
             Frequently Asked Questions
           </h2>
-          <p className="text-xs text-slate-600 md:text-sm">
+          <p className="text-xs opacity-80 md:text-sm">
             Find answers to common questions about DevSage
           </p>
-        </div>
+        </motion.div>
 
-        <div className="mx-auto max-w-3xl">
+        <motion.div
+          initial={{
+            y: 40,
+            opacity: 0,
+          }}
+          whileInView={{
+            y: 0,
+            opacity: 1,
+            transition: {
+              duration: 0.6,
+              ease: "easeOut",
+            },
+          }}
+          viewport={{
+            once: true,
+            amount: 1,
+          }}
+          className="mx-auto max-w-3xl"
+        >
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="text-left text-xs font-medium md:text-sm">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-600">
+                <AccordionContent className="opacity-80">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
-        </div>
+        </motion.div>
 
         <div className="mt-16 text-center">
           <p className="mb-4 text-slate-600">Still have questions?</p>
           <a
             href="#contact"
-            className="font-medium text-indigo-600 underline hover:text-indigo-800"
+            className="font-medium text-blue-600 underline hover:text-blue-800"
           >
             Contact our support team
           </a>

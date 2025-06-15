@@ -23,7 +23,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <SessionProvider>
-      <html lang="en" className={`${geist.variable}`}>
+      <html lang="en" className={``}>
         <body>
           <TRPCReactProvider>{children}</TRPCReactProvider>
           <Toaster richColors />

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useProject } from "@/hooks/useProject";
 import useRefetch from "@/hooks/useRefetch";
 import { api } from "@/trpc/react";
+import { Trash2 } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
 
@@ -35,6 +36,7 @@ const ArchiveButton = () => {
         }
       }}
     >
+      <Trash2 className="size-4" />
       Archive
     </Button>
   );

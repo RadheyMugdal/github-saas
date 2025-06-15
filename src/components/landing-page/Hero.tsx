@@ -1,71 +1,75 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Rocket, Video } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import {
+  DOMKeyframesDefinition,
+  ElementOrSelector,
+  useAnimate,
+} from "motion/react";
 
 const Hero = () => {
+  const [scope, animate] = useAnimate();
+  useEffect(() => {
+    animate([
+      [
+        ".hero-title",
+        { y: [40, 0], opacity: [0, 1] },
+        { duration: 0.6, ease: "easeOut" },
+      ],
+      [
+        ".hero-description",
+        { y: [40, 0], opacity: [0, 1] },
+        { duration: 0.6, ease: "easeOut" },
+      ],
+      [
+        ".button-container",
+        { y: [40, 0], opacity: [0, 1] },
+        { duration: 0.6, ease: "easeOut" },
+      ],
+      [
+        ".image-container",
+        { y: [40, 0], opacity: [0, 1] },
+        { duration: 0.6, ease: "easeOut" },
+      ],
+    ]);
+  }, []);
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white to-slate-50 px-12">
-      {/* Background Elements */}
-      <div className="absolute inset-0 z-0">
-        <div className="bg-gradient-radial absolute top-0 right-0 h-1/3 w-1/3 from-indigo-100/40 to-transparent"></div>
-        <div className="bg-gradient-radial absolute bottom-0 left-0 h-1/2 w-1/2 from-cyan-100/30 to-transparent"></div>
+    <section
+      ref={scope}
+      className="flex flex-col items-center justify-center gap-12 py-32"
+    >
+      <div className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-6">
+        <h1 className="hero-title bg-linear-to-b from-zinc-900 to-zinc-700 bg-clip-text py-4 text-center text-4xl font-bold text-balance text-transparent md:text-5xl md:leading-14 lg:text-6xl">
+          Understand any Github Repository in minutes
+        </h1>
+        <p className="text-muted-foreground hero-description mx-4 text-center text-xs md:max-w-[70%] md:text-sm">
+          Ask questions about any codebase and get instant insights.Upload
+          meeting recordings to extract key points and action item. Transform
+          how you understand code changes and meetings
+        </p>
       </div>
-
-      <div className="relative z-10 container mx-auto px-4 pt-20 pb-24 md:pt-28 md:pb-32">
-        <div className="mx-auto max-w-4xl text-center">
-          <div className="mb-8 inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-sm font-medium text-indigo-800">
-            <span className="mr-2 h-2 w-2 rounded-full bg-indigo-600"></span>
-            Simplifying Developer Onboarding
-          </div>
-
-          <h1 className="mb-6 text-2xl font-semibold md:text-5xl">
-            Your Intelligent <span className="">Developer Assistant</span>
-          </h1>
-
-          <p className="mx-auto mb-10 max-w-4xl text-sm text-slate-600 md:text-lg lg:max-w-3xl">
-            Fast-track developer onboarding and team collaboration. Ask
-            questions about your codebase and extract key insights from
-            meetings—all in one unified dashboard.
-          </p>
-
-          <div className="mb-16 flex flex-col justify-center gap-4 sm:flex-row">
-            <Link href={"/sign-up"}>
-              <Button size="lg" className="flex items-center gap-2">
-                Try Devsage Free <ArrowRight size={18} />
-              </Button>
-            </Link>
-            <Button variant="outline" size="lg">
-              See Demo
-            </Button>
-          </div>
-
-          {/* Dashboard Preview */}
-          <div className="relative mx-auto max-w-5xl">
-            <div className="rounded-xl border border-slate-100 bg-white shadow-2xl shadow-indigo-200/50">
-              {/* Dashboard mockup */}
-              <div className="flex items-center gap-2 rounded-t-xl bg-slate-800 p-3">
-                <div className="flex gap-1.5">
-                  <div className="h-3 w-3 rounded-full bg-red-500"></div>
-                  <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
-                  <div className="h-3 w-3 rounded-full bg-green-500"></div>
-                </div>
-                <div className="flex-1 text-center">
-                  <span className="mr-4 text-xs text-slate-400">Dashboard</span>
-                </div>
-              </div>
-
-              <Image
-                src={"/image.png"}
-                width={1024}
-                height={1024}
-                alt="Dashboard page"
-                className="h-full w-full"
-              />
-            </div>
-          </div>
-        </div>
+      <div className="button-container flex gap-6">
+        <Button className="rounded-full bg-linear-to-b from-emerald-500 to-emerald-800 to-99% !px-4 !py-2 font-semibold">
+          Try for free
+          <ArrowRight />
+        </Button>
+        <Button variant={"secondary"} className="rounded-full">
+          <Rocket />
+          Watch Demo
+        </Button>
+      </div>
+      <div className="image-container relative mx-8 my-8">
+        <div className="bg-primary/30 absolute inset-0 z-10 rounded-xl blur-lg" />
+        <Image
+          src={"/image.png"}
+          width={1024}
+          height={1024}
+          alt="dashboard image"
+          className="relative z-20"
+        />
       </div>
     </section>
   );

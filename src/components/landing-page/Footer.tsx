@@ -3,7 +3,7 @@ import { Mail, Github, Twitter } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-slate-900 px-12 pt-16 pb-8 text-white">
+    <footer className="bg-emerald-800 px-12 pt-16 pb-8 text-white">
       <div className="container mx-auto">
         <div className="mb-12 grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="md:col-span-2">
@@ -80,12 +80,12 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-between border-t border-slate-800 pt-8 md:flex-row">
+        <div className="flex flex-col items-center justify-between border-t pt-8 md:flex-row">
           <p className="mb-4 text-sm text-slate-400 md:mb-0">
             &copy; {new Date().getFullYear()} DevSage. All rights reserved.
           </p>
           <div className="flex space-x-6">
-            <a href="#" className="text-sm text-slate-400 hover:text-white">
+            <a href="#" className="text-sm opacity-80 hover:opacity-100">
               Privacy Policy
             </a>
             <a href="#" className="text-sm text-slate-400 hover:text-white">
