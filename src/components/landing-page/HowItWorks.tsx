@@ -9,7 +9,7 @@ const HowItWorks = () => {
       title: "Connect Your Repository",
       description:
         "Paste your GitHub repository URL and let DevSage analyze your codebase structure and dependencies.",
-      image: "/meeting-upload.png",
+      image: "/connect-repo.png",
     },
     {
       index: 2,
