@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { SiDailydotdev } from "react-icons/si";
+import { motion } from "motion/react";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -14,14 +15,28 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/80 backdrop-blur-sm">
+    <motion.header
+      initial={{
+        y: "-100%",
+        opacity: 0,
+      }}
+      animate={{
+        y: 0,
+        opacity: 1,
+        transition: {
+          duration: 0.7,
+          ease: "easeOut",
+        },
+      }}
+      className="sticky top-0 z-50 border-b border-gray-100 bg-white/80 backdrop-blur-sm"
+    >
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex flex-shrink-0 items-center">
             <Link href={"/"}>
-              <h1 className="text-primary flex gap-2 text-xl font-bold">
-                <SiDailydotdev className="text-primary size-7" />
+              <h1 className="flex gap-2 text-xl font-bold text-emerald-600">
+                <SiDailydotdev className="size-7 text-emerald-700" />
                 <span>DevSage</span>
               </h1>
             </Link>
@@ -31,25 +46,25 @@ const Header = () => {
           <nav className="hidden space-x-8 md:flex">
             <a
               href="#features"
-              className="text-sm font-medium text-slate-600 hover:text-indigo-600"
+              className="hover:text-primary text-sm font-medium text-slate-600"
             >
               Features
             </a>
             <a
               href="#how-it-works"
-              className="text-sm font-medium text-slate-600 hover:text-indigo-600"
+              className="hover:text-primary text-sm font-medium text-slate-600"
             >
               How It Works
             </a>
             <a
               href="#pricing"
-              className="text-sm font-medium text-slate-600 hover:text-indigo-600"
+              className="hover:text-primary text-sm font-medium text-slate-600"
             >
               Pricing
             </a>
             <a
               href="#faq"
-              className="text-sm font-medium text-slate-600 hover:text-indigo-600"
+              className="hover:text-primary text-sm font-medium text-slate-600"
             >
               FAQ
             </a>
@@ -63,7 +78,9 @@ const Header = () => {
               </Button>
             </Link>
             <Link href={"/sign-up"}>
-              <Button size="sm">Get Started</Button>
+              <Button className="rounded-full !px-4 !py-2 font-semibold">
+                Get started
+              </Button>
             </Link>
           </div>
 
@@ -130,7 +147,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 };
 

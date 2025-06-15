@@ -1,24 +1,67 @@
+"use client";
 import React from "react";
 import { Check, CreditCard, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { motion } from "motion/react";
 
 const Pricing = () => {
   return (
-    <section id="pricing" className="bg-slate-50 px-12 py-24">
+    <section
+      id="pricing"
+      className="text-muted-foreground from-primary/20 mx-6 rounded-3xl bg-linear-to-b to-white px-12 py-24"
+    >
       <div className="container mx-auto">
-        <div className="mx-auto mb-16 max-w-2xl text-center">
-          <h2 className="mb-4 text-2xl font-semibold md:text-3xl">
+        <motion.div
+          initial={{
+            y: 40,
+            opacity: 0,
+          }}
+          whileInView={{
+            y: 0,
+            opacity: 1,
+            transition: {
+              duration: 0.6,
+              ease: "easeOut",
+            },
+          }}
+          viewport={{
+            once: true,
+            amount: 1,
+          }}
+          className="mx-auto mb-16 max-w-2xl text-center"
+        >
+          <h2 className="mb-4 text-2xl font-semibold text-black md:text-4xl">
             Simple, Credit-Based Pricing
           </h2>
-          <p className="text-xs text-slate-600 md:text-sm">
+          <p className="text-xs opacity-80 md:text-sm">
             Buy credits as you need them and pay only for what you use
           </p>
-        </div>
+        </motion.div>
 
-        <div className="mx-auto max-w-4xl">
-          <div className="rounded-xl border border-indigo-200 bg-white p-8 shadow-lg shadow-indigo-100">
+        <motion.div
+          initial={{
+            opacity: 0,
+            scale: 0.8,
+          }}
+          whileInView={{
+            opacity: 1,
+            scale: 1,
+
+            transition: {
+              duration: 0.7,
+              ease: "backOut",
+              delay: 0.3,
+            },
+          }}
+          viewport={{
+            amount: 0.3,
+            once: true,
+          }}
+          className="mx-auto max-w-4xl"
+        >
+          <div className="rounded-xl border bg-white p-8">
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
               {/* Pricing Info Side */}
               <div className="space-y-6">
@@ -29,13 +72,13 @@ const Pricing = () => {
                   <span className="font-bold">$1 = 50 credits</span>
                 </div>
 
-                <div className="mb-4 flex items-center gap-2 text-indigo-600">
+                <div className="text-primary mb-4 flex items-center gap-2">
                   <CreditCard size={18} />
                   <span>1 credit = 1 file analyzed</span>
                 </div>
 
-                <div className="rounded-lg border border-indigo-100 bg-indigo-50 p-4">
-                  <p className="font-medium text-indigo-800">
+                <div className="rounded-lg border border-indigo-100 bg-blue-50 p-4">
+                  <p className="font-medium text-blue-800">
                     New users get 150 credits for free!
                   </p>
                 </div>
@@ -113,7 +156,7 @@ const Pricing = () => {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
