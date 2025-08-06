@@ -3,8 +3,15 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import React from "react";
 import AppSidebar from "./dashboard/app-sidebar";
 import UserButton from "@/components/user/UserButton";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-const SidebarLayout = ({ children }: { children: React.ReactNode }) => {
+const SidebarLayout = async ({ children }: { children: React.ReactNode }) => {
+  const data = await auth.api.getSession({ headers: await headers() })
+  if (!data?.session) {
+    redirect("/sign-in")
+  }
   return (
     <SidebarProvider className="flex h-screen w-screen">
       <AppSidebar />

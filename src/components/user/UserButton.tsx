@@ -1,4 +1,4 @@
-import { auth, signOut } from "@/auth";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,9 +11,11 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { LogOut } from "lucide-react";
 import LogoutButton from "./LogoutButton";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 const UserButton = async () => {
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) return redirect("/sign-in");
   return (
     <DropdownMenu>

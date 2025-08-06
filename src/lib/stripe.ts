@@ -1,14 +1,16 @@
 "use server";
-import { auth } from "@/auth";
+
 import { redirect } from "next/navigation";
 import Stripe from "stripe";
+import { auth } from "./auth";
+import { headers } from "next/headers";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-03-31.basil",
 });
 
 export async function createCheckoutSession(credits: number) {
-  const userSession = await auth();
+  const userSession = await auth.api.getSession({ headers: await headers() })
   if (!userSession?.user) throw new Error("User not found");
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],

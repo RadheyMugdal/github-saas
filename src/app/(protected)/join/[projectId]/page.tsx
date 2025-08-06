@@ -1,5 +1,6 @@
+import { auth } from "@/lib/auth";
 import { db } from "@/server/db";
-import { auth } from "@/auth";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -9,7 +10,7 @@ type Props = {
 
 const JoinHandler = async ({ params }: Props) => {
   const { projectId } = await params;
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() })
   if (!session?.user) redirect("/sign-in");
   const dbUser = await db.user.findUnique({ where: { id: session.user.id } });
 

@@ -5,7 +5,6 @@ import { Geist } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { Toaster } from "sonner";
-import { SessionProvider } from "next-auth/react";
 
 export const metadata: Metadata = {
   title: "Github saas",
@@ -22,13 +21,11 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <SessionProvider>
-      <html lang="en" className={``}>
-        <body>
-          <TRPCReactProvider>{children}</TRPCReactProvider>
-          <Toaster richColors />
-        </body>
-      </html>
-    </SessionProvider>
+    <html lang="en" className={``}>
+      <body>
+        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <Toaster richColors />
+      </body>
+    </html>
   );
 }
