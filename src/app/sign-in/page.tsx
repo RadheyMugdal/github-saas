@@ -12,8 +12,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
 import { SiDailydotdev } from "react-icons/si";
+import { authClient } from "@/lib/auth-client";
 
 const page = () => {
   return (
@@ -33,8 +33,10 @@ const page = () => {
             <Button
               variant={"outline"}
               className="w-full cursor-pointer shadow-sm"
-              onClick={() => {
-                signIn("google");
+              onClick={async () => {
+                await authClient.signIn.social({
+                  provider: "google"
+                })
               }}
             >
               <FcGoogle className="" />
@@ -44,8 +46,10 @@ const page = () => {
             <Button
               variant={"outline"}
               className="w-full cursor-pointer shadow-sm"
-              onClick={() => {
-                signIn("github");
+              onClick={async () => {
+                await authClient.signIn.social({
+                  provider: "github"
+                })
               }}
             >
               <FaGithub className="" />

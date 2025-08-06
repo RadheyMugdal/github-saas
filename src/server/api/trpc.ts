@@ -11,7 +11,9 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "@/server/db";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+
 
 /**
  * 1. CONTEXT
@@ -82,7 +84,7 @@ export const createTRPCRouter = t.router;
  */
 
 const isAuthenticated = t.middleware(async ({ next, ctx }) => {
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() })
 
   if (!session?.user) {
     throw new TRPCError({
