@@ -11,7 +11,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { useProject } from "@/hooks/useProject";
 import React, { useState } from "react";
 import { askQuestion } from "./actions";
-import { readStreamableValue } from "ai/rsc";
 import CodeReferences from "./code-references";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
@@ -40,10 +39,10 @@ const AskQuestionCard = () => {
     setAnswer("");
     if (!project?.id) return;
     setLoading(true);
-    const { output, fileReferences } = await askQuestion(question, project.id);
+    const { stream, fileReferences } = await askQuestion(question, project.id);
     setOpen(true);
     setFileReferences(fileReferences);
-    for await (const delta of readStreamableValue(output)) {
+    for await (const delta of stream) {
       if (delta) {
         setAnswer((ans) => ans + delta);
       }

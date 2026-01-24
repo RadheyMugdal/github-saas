@@ -84,6 +84,11 @@ model Project {
     githubUrl           String
     githubToken         String?
     deletedAt           DateTime?
+    indexStatus         IndexStatus           @default(PENDING)
+    indexProgress       Int                   @default(0)
+    totalFiles          Int?
+    processedFiles      Int                   @default(0)
+    indexError          String?
     userToProject       UserToProject[]
     commit              Commit[]
     SourceCodeEmbedding SourceCodeEmbedding[]
@@ -179,4 +184,11 @@ model StripeTransaction {
 enum MeetingStatus {
     PROCESSING
     COMPLETED
+}
+
+enum IndexStatus {
+    PENDING
+    PROCESSING
+    READY
+    FAILED
 }

@@ -3,6 +3,7 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { pollCommits } from "@/lib/github";
 import { checkCredits, indexGithubRepo } from "@/lib/github-loader";
 import { check } from "prettier";
+import { inngest } from "@/inngest/client";
 
 export const projectRouter = createTRPCRouter({
   createProject: protectedProcedure
@@ -32,6 +33,9 @@ export const projectRouter = createTRPCRouter({
         data: {
           name: input.name,
           githubUrl: input.githubUrl,
+          githubToken: input.githubToken,
+          totalFiles: fileCount,
+          indexStatus: "PENDING",
           userToProject: {
             create: {
               userId: ctx.user.id as string,
@@ -39,18 +43,17 @@ export const projectRouter = createTRPCRouter({
           },
         },
       });
-      await indexGithubRepo(project.id, input.githubUrl, input.githubToken);
-      await pollCommits(project.id);
-      await ctx.db.user.update({
-        where: {
-          id: ctx.user.id,
-        },
+
+      // Send event to Inngest for background processing
+      await inngest.send({
+        name: "repo/index",
         data: {
-          credits: {
-            decrement: fileCount,
-          },
+          projectId: project.id,
+          githubUrl: input.githubUrl,
+          githubToken: input.githubToken,
         },
       });
+
       return project;
     }),
   getProjects: protectedProcedure.query(async ({ ctx }) => {
@@ -224,6 +227,7 @@ export const projectRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      console.log("Checking credits");
       const fileCount = await checkCredits(input.githubUrl, input.githubToken);
       const userCredits = await ctx.db.user.findUnique({
         where: {
@@ -237,5 +241,27 @@ export const projectRouter = createTRPCRouter({
         fileCount,
         credits: userCredits?.credits || 0,
       };
+    }),
+  getProjectById: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.project.findUnique({
+        where: { id: input.projectId },
+        select: {
+          id: true,
+          name: true,
+          githubUrl: true,
+          indexStatus: true,
+          indexProgress: true,
+          totalFiles: true,
+          processedFiles: true,
+          indexError: true,
+          createdAt: true,
+        },
+      });
     }),
 });

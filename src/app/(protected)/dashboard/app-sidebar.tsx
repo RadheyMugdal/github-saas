@@ -23,6 +23,9 @@ import {
   LayoutDashboard,
   Plus,
   Presentation,
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -98,31 +101,60 @@ const AppSidebar = () => {
           <SidebarGroupLabel>Your Projects</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {projects?.map((item) => (
-                <SidebarMenuItem key={item.name}>
-                  <SidebarMenuButton
-                    asChild
-                    onClick={() => {
-                      setProjectId(item.id);
-                      router.push(`/dashboard`);
-                    }}
-                  >
-                    <div>
-                      <div
-                        className={cn(
-                          "text-primary flex size-6 items-center justify-center rounded-sm border bg-white text-sm",
-                          {
-                            "bg-primary text-white": item.id === projectId,
-                          },
+              {projects?.map((item) => {
+                const isProcessing = item.indexStatus === "PROCESSING";
+                const isPending = item.indexStatus === "PENDING";
+                const isReady = item.indexStatus === "READY";
+                const isFailed = item.indexStatus === "FAILED";
+
+                return (
+                  <SidebarMenuItem key={item.name}>
+                    <SidebarMenuButton
+                      asChild
+                      onClick={() => {
+                        if (isReady) {
+                          setProjectId(item.id);
+                          router.push(`/dashboard`);
+                        }
+                      }}
+                      className={cn({
+                        "opacity-50 cursor-not-allowed": !isReady,
+                      })}
+                    >
+                      <div className="flex items-center gap-2">
+                        <div
+                          className={cn(
+                            "text-primary flex size-6 items-center justify-center rounded-sm border bg-white text-sm shrink-0",
+                            {
+                              "bg-primary text-white": item.id === projectId,
+                            },
+                          )}
+                        >
+                          {item.name[0]}
+                        </div>
+                        <span className="truncate">{item.name}</span>
+                        {isPending && (
+                          <Loader2 className="size-3 animate-spin text-muted-foreground" />
                         )}
-                      >
-                        {item.name[0]}
+                        {isProcessing && (
+                          <div className="flex items-center gap-1">
+                            <Loader2 className="size-3 animate-spin text-blue-500" />
+                            <span className="text-xs text-muted-foreground">
+                              {item.indexProgress || 0}%
+                            </span>
+                          </div>
+                        )}
+                        {isReady && (
+                          <CheckCircle2 className="size-3 text-green-500" />
+                        )}
+                        {isFailed && (
+                          <AlertCircle className="size-3 text-red-500" />
+                        )}
                       </div>
-                      <span>{item.name}</span>
-                    </div>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
               <div className="h-2"></div>
               {open && (
                 <SidebarMenuItem>
