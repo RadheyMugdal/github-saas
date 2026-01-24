@@ -79,7 +79,7 @@ const MeetingCard = () => {
               Create a new meeting
             </h3>
             <p className="mt-1 text-center text-sm text-gray-500">
-              Analyse your meeting with Diaonysus.
+              Analyse your meeting with DevSage.
               <br />
               Power by AI.
             </p>

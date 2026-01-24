@@ -1,8 +1,15 @@
 import { processMeeting } from "@/lib/assembly";
 import { db } from "@/server/db";
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
+  // Verify authentication
+  const session = await auth.api.getSession({ headers: req.headers });
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const { meetingUrl, projectId, meetingId } = await req.json();
     const { summaries } = await processMeeting(meetingUrl);

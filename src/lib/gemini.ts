@@ -1,84 +1,104 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Document } from "@langchain/core/documents";
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+import { createOpenAI } from "@ai-sdk/openai";
+import { embed, generateText } from "ai";
 
-const model = genAI.getGenerativeModel({
-  model: "gemini-1.5-flash",
-});
 
-export const aiSummarizeCommit = async (diff: string) => {
-  const res = await model.generateContent([
-    `
-You are an expert programmer, and you are trying to summarize a git diff.
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
-Reminders about the git diff format:
-For every file, there are a few metadata lines, like (for example):
----
-diff --git a/lib/index.js b/lib/index.js
-index 2c6e0f3..d1b4a5d 100644
---- a/lib/index.js
-+++ b/lib/index.js
----
-
-This means that 'lib/index.js' was modified in this commit. Note that this is only an example. 
-
-Then there is a specifier of the lines that were modified:
-- A line starting with '+' means it was added.
-- A line starting with '-' means it was deleted.
-- A line starting with neither '+' nor '-' is context, for better understanding.
-
----
-
-Below are examples of summary comments to use as reference for the format:
-
----
-* Raised the amount of returned recording from 1 to 2 in the getRecording function.
-* Added a new function called getRecordings that returns an array of recordings.
-* Added a new function called getRecording that returns a single recording.
-* Updated the getRecording function to return a single recording instead of an array of recordings.
----
-
-Most commits will have fewer comments than this example.
-
-The last comment does not include the file names, because there were more than two relevant files in the hypothetical commit.
-
-Do not include any part of the example in your summary. It is provided only as guidance for appropriate summary formatting.
-
----
-
-Please summarize the following diff file:
-
-${diff}
-    `,
-  ]);
-
-  return res.response.text();
-};
-
-export async function summarizeCode(doc: Document) {
-  try {
-    const code = doc.pageContent.slice(1, 10000);
-    const response = await model.generateContent([
-      `You are an intelligent senior software engineer who specialize in onboarding junior software engineers onto projects. `,
-      ` You are onboarding a junior software engineer and explaining to them the purpose of the ${doc.metadata.source} file.
-            Here is the code:
-            ---
-            ${code}
-            ---
-            Give a summary no more than 100 words of the code above.
-        `,
-    ]);
-    return response.response.text();
-  } catch (error) {
-    return "";
-  }
+if (!OPENROUTER_API_KEY) {
+  console.warn("⚠️ OPENROUTER_API_KEY not set - AI features disabled");
 }
 
-export async function generateEmbedding(summary: string) {
-  const model = genAI.getGenerativeModel({
-    model: "text-embedding-004",
+export const openrouter = createOpenAI({
+  baseURL: "https://openrouter.ai/api/v1",
+  apiKey: OPENROUTER_API_KEY ?? "",
+  headers: {
+    "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+    "X-Title": "DevSage GitHub SaaS",
+  },
+});
+``
+
+const SUMMARIZATION_MODEL = "google/gemini-2.0-flash-exp:free";
+const EMBEDDING_MODEL = "thenlper/gte-base";
+
+/* ============================
+   COMMIT DIFF SUMMARY
+============================ */
+export async function aiSummarizeCommit(diff: string) {
+  if (!OPENROUTER_API_KEY) {
+    throw new Error("OPENROUTER_API_KEY is not configured");
+  }
+
+  const { text } = await generateText({
+    model: openrouter(SUMMARIZATION_MODEL),
+    temperature: 0.2,
+    prompt: `
+You are an expert programmer summarizing a git diff.
+
+Rules:
+- Use bullet points
+- Focus on behavior changes
+- Do NOT repeat file names unless necessary
+
+Git diff:
+---
+${diff}
+---
+`,
   });
-  const result = await model.embedContent(summary);
-  const embedding = result.embedding;
-  return embedding.values;
+
+  return text.trim();
+}
+
+/* ============================
+   CODE FILE SUMMARY
+============================ */
+export async function summarizeCode(doc: Document) {
+  if (!OPENROUTER_API_KEY) {
+    throw new Error("OPENROUTER_API_KEY is not configured");
+  }
+
+  const code = doc.pageContent.slice(0, 10_000);
+
+  const { text } = await generateText({
+    model: openrouter(SUMMARIZATION_MODEL),
+    temperature: 0.3,
+    prompt: `
+You are a senior engineer onboarding a junior dev.
+
+File: ${doc.metadata.source}
+
+Code:
+---
+${code}
+---
+
+Explain the purpose in under 100 words.
+`,
+  });
+
+  return text.trim();
+}
+
+/* ============================
+   EMBEDDINGS (768 DIM)
+============================ */
+export async function generateEmbedding(text: string): Promise<number[]> {
+  if (!OPENROUTER_API_KEY) {
+    throw new Error("OPENROUTER_API_KEY is not configured");
+  }
+
+  const { embedding } = await embed({
+    model: EMBEDDING_MODEL, // ✅ FIXED
+    value: text,
+  });
+
+  if (embedding.length !== 768) {
+    console.warn(
+      `⚠️ Embedding dimension mismatch: ${embedding.length} (expected 768)`
+    );
+  }
+
+  return embedding;
 }

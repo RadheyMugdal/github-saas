@@ -3,6 +3,14 @@ import { Document } from "@langchain/core/documents";
 import { generateEmbedding, summarizeCode } from "./gemini";
 import { db } from "@/server/db";
 import { Octokit } from "octokit";
+
+// Progress callback type for indexing
+export type IndexProgressCallback = (progress: {
+  processed: number;
+  total: number;
+  status: "PROCESSING" | "READY" | "FAILED";
+  error?: string;
+}) => Promise<void>;
 export const loadGithubRepo = async (
   githubUrl: string,
   githubToken?: string,
@@ -36,7 +44,6 @@ const getFileCount = async (
     repo: githubRepo,
     path,
   });
-
   if (!Array.isArray(data) && data.type === "file") {
     return acc + 1;
   }
@@ -63,6 +70,28 @@ const getFileCount = async (
   return acc;
 };
 
+// More efficient method using Git Tree API (single API call)
+const getFileCountEfficient = async (
+  octokit: Octokit,
+  githubOwner: string,
+  githubRepo: string,
+): Promise<number> => {
+  try {
+    const { data } = await octokit.rest.git.getTree({
+      owner: githubOwner,
+      repo: githubRepo,
+      tree_sha: "HEAD",
+      recursive: "true",
+    });
+
+    // Count only files (blobs), not trees
+    return data.tree.filter((item) => item.type === "blob").length;
+  } catch {
+    // Fallback to recursive method if tree API fails
+    return getFileCount("", octokit, githubOwner, githubRepo, 0);
+  }
+};
+
 export const checkCredits = async (githubUrl: string, githubToken?: string) => {
   const octokit = new Octokit({
     auth: githubToken,
@@ -70,7 +99,8 @@ export const checkCredits = async (githubUrl: string, githubToken?: string) => {
   const githubOwner = githubUrl.split("/")[3];
   const githubRepo = githubUrl.split("/")[4];
   if (!githubOwner || !githubRepo) return 0;
-  const fileCount = await getFileCount("", octokit, githubOwner, githubRepo, 0);
+  // Use efficient tree API (1 API call instead of N calls per directory)
+  const fileCount = await getFileCountEfficient(octokit, githubOwner, githubRepo);
   return fileCount;
 };
 
@@ -78,27 +108,78 @@ export const indexGithubRepo = async (
   projectId: string,
   githubUrl: string,
   githubToken?: string,
+  onProgress?: IndexProgressCallback,
 ) => {
-  const docs = await loadGithubRepo(githubUrl, githubToken);
-  const allEmbeddings = await generateEmbeddings(docs);
-  await Promise.allSettled(
-    allEmbeddings.map(async (embedding, index) => {
-      if (!embedding) return;
-      const sourceCodeEmbedding = await db.sourceCodeEmbedding.create({
-        data: {
-          summary: embedding.summary,
-          sourceCode: embedding.sourceCode,
-          fileName: embedding.fileName,
-          projectId,
-        },
+  try {
+    // Load GitHub repository
+    const docs = await loadGithubRepo(githubUrl, githubToken);
+
+    // Update total file count
+    if (onProgress) {
+      await onProgress({
+        processed: 0,
+        total: docs.length,
+        status: "PROCESSING",
       });
-      await db.$executeRaw`
-      UPDATE "SourceCodeEmbedding" 
-      SET "summaryEmbedding" = ${embedding.embedding}::vector 
-      WHERE id = ${sourceCodeEmbedding.id}
-      `;
-    }),
-  );
+    }
+
+    // Generate embeddings and save to database with progress tracking
+    const BATCH_SIZE = 5;
+    for (let i = 0; i < docs.length; i += BATCH_SIZE) {
+      const batch = docs.slice(i, i + BATCH_SIZE);
+      const allEmbeddings = await generateEmbeddings(batch);
+
+      await Promise.allSettled(
+        allEmbeddings.map(async (embedding) => {
+          if (!embedding) return;
+          const sourceCodeEmbedding = await db.sourceCodeEmbedding.create({
+            data: {
+              summary: embedding.summary,
+              sourceCode: embedding.sourceCode,
+              fileName: embedding.fileName,
+              projectId,
+            },
+          });
+          await db.$executeRaw`
+          UPDATE "SourceCodeEmbedding"
+          SET "summaryEmbedding" = ${embedding.embedding}::vector
+          WHERE id = ${sourceCodeEmbedding.id}
+          `;
+        }),
+      );
+
+      // Update progress
+      const processed = Math.min(i + BATCH_SIZE, docs.length);
+      if (onProgress) {
+        await onProgress({
+          processed,
+          total: docs.length,
+          status: "PROCESSING",
+        });
+      }
+    }
+
+    // Mark as complete
+    if (onProgress) {
+      await onProgress({
+        processed: docs.length,
+        total: docs.length,
+        status: "READY",
+      });
+    }
+
+    return { success: true, fileCount: docs.length };
+  } catch (error) {
+    if (onProgress) {
+      await onProgress({
+        processed: 0,
+        total: 0,
+        status: "FAILED",
+        error: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
+    throw error;
+  }
 };
 
 const generateEmbeddings = async (docs: Document[]) => {
